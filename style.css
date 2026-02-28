@@ -1,25 +1,76 @@
 :root {
-    --bg-color: #0f172a;
-    --text-color: #f8fafc;
-    --accent-color: #38bdf8;
-    --nav-bg: #1e293b;
+    --bg-color: #121212;      /* Deep black-grey */
+    --header-bg: #1e1e1e;    /* Slightly lighter grey for depth */
+    --text-color: #e0e0e0;   /* Soft white */
+    --accent-color: #38bdf8; /* Keep your blue accent */
+    --footer-bg: #181818;
 }
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
-    line-height: 1.6;
     margin: 0;
-    padding: 0;
+    padding-top: 150px; /* Essential: prevents content from hiding under the fixed header */
+    transition: padding 0.3s ease;
 }
 
-header {
-    background: var(--nav-bg);
-    padding: 1rem 0;
-    text-align: center;
-    border-bottom: 2px solid var(--accent-color);
+/* ----- The Shrinking Header ----- */
+#header {
+    position: fixed;
+    top: 0; 
+    left: 0; 
+    right: 0;
+    display: flex;
+    flex-direction: column; /* Stacks main nav and sub nav */
+    height: auto; /* Let content determine height initially */
+    min-height: 100px;
+    padding: 0 2rem; /* Remove horizontal padding here, move it to inner divs */
+    background: var(--header-bg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    border-bottom: 1px solid #333;
 }
+
+.main-nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 2rem;
+    height: 100px; /* This is the part that will shrink */
+    transition: height 0.3s ease;
+}
+
+/* Style for the Projects-only bar */
+#sub-header {
+    background: #252525; /* Slightly lighter than main header */
+    width: 100%;
+    padding: 10px 2rem;
+    border-bottom: 1px solid #444;
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+}
+
+#sub-header a {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#sub-header a:hover {
+    color: var(--accent-color);
+}
+
+/* Update the shrink logic */
+#header.shrink .main-nav-bar {
+    height: 60px;
+}
+
 
 nav a {
     color: var(--text-color);
@@ -27,6 +78,13 @@ nav a {
     margin: 0 15px;
     font-weight: bold;
     transition: color 0.3s;
+}
+
+nav a {
+    color: var(--text-color);
+    margin-left: 1.5rem;
+    text-decoration: none;
+    font-weight: 500;
 }
 
 nav a:hover {
@@ -59,3 +117,103 @@ footer {
     font-size: 0.9rem;
     opacity: 0.7;
 }
+
+#banner {
+    margin-top: 40px;
+}
+
+/* Project Grid Layout */
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px; /* Space between photos */
+    margin-top: 30px;
+}
+
+.project-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px; /* Optional: smooth corners, but no border lines */
+    aspect-ratio: 16 / 9;
+}
+
+.project-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Keeps images from stretching */
+    transition: transform 0.5s ease;
+}
+
+/* The Hover Effect */
+.project-card:hover img {
+    transform: scale(1.02); /* Subtle zoom for "spice" */
+    filter: brightness(70%);
+}
+
+.thumbnail-overlay {
+    position: absolute;
+    font-size: 0.9rem;
+    text-align: center;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding-bottom: 10px;
+    padding-top: 0px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.8));
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Fullscreen overlay – inserted after <body> */
+.fullscreen-image-overlay {
+    position: fixed;
+    inset: 0;                      /* top/right/bottom/left = 0 */
+    background: rgba(0, 0, 0, 0.85);
+    display: none;                 /* hidden until a thumbnail is clicked */
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;                  /* above header/footer & all content */
+}
+
+.fullscreen-image-overlay img {
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.5);
+}
+
+.project-card:hover .thumbnail-overlay {
+    opacity: 1;
+}
+
+#links {
+    display: flex;         /* Makes the list horizontal */
+    list-style: none;      /* Removes the dots */
+    padding: 0;
+    gap: 30px;             /* Space between the link items */
+    margin-top: 20px;
+}
+
+#links li a {
+    display: flex;
+    align-items: center;   /* Centers icon and text vertically */
+    gap: 10px;             /* Space between the icon and the text */
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 1.1rem;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+/* Specific colors for the brands on hover */
+#links li a:hover {
+    transform: translateY(-3px); /* Subtle "lift" effect */
+}
+
+
+
+#links li a:hover .fa-deviantart { color: #05cc47; }
+#links li a:hover .fa-github     { color: #6e5494; }
+#links li a:hover .fa-linkedin   { color: #0077b5; }
